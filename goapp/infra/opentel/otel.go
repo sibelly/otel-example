@@ -29,7 +29,6 @@ func (o *OpenTel) GetTracer() trace.Tracer {
 		o.ExporterEndpoint,
 		zipkin.WithLogger(logger),
 		zipkin.WithSDKOptions(sdktrace.WithSampler(sdktrace.AlwaysSample())),
-
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -41,7 +40,7 @@ func (o *OpenTel) GetTracer() trace.Tracer {
 		sdktrace.WithSpanProcessor(batcher),
 		sdktrace.WithResource(resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceNameKey.String("full-cycle-platform"),
+			semconv.ServiceNameKey.String("test-platform"),
 		)),
 	)
 	otel.SetTracerProvider(tp)

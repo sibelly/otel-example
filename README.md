@@ -5,8 +5,10 @@
 
 - Inside `goapp`
 ```bash
-docker compose up -d
+docker compose up -d # to start a zipkin container
 go run ./main.go 
 ```
 
 - Inside `nodejs`
+
+[README.md](https://github.com/sibelly/otel-example/blob/main/nodejs/README.md)
