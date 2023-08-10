@@ -32,19 +32,19 @@ func main() {
 func homeHandler(writer http.ResponseWriter, request *http.Request) {
 	ctx := baggage.ContextWithoutBaggage(request.Context())
 
-	// rotina 1 - Process File
+	// trace 1 - Process File
 	ctx, processFile := tracer.Start(ctx, "process-file")
 	time.Sleep(time.Millisecond * 100)
 	processFile.End()
 
-	// rotina 2 - Fazer Request HTTP
+	// trace 2 - HTTP Request
 	ctx, httpCall := tracer.Start(ctx, "request-remote-json")
 	client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:3000/", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-	res, err := client.Do(req) // chamo a requisição
+	res, err := client.Do(req) // call the request
 
 	if err != nil {
 		log.Fatalln(err)
@@ -56,8 +56,8 @@ func homeHandler(writer http.ResponseWriter, request *http.Request) {
 	time.Sleep(time.Millisecond * 300)
 	httpCall.End()
 
-	// rotina 3 - Exibir resultado
-	ctx, renderContent := tracer.Start(ctx, "render-content")
+	// trace 3 - Render Content
+	_, renderContent := tracer.Start(ctx, "render-content")
 	time.Sleep(time.Millisecond * 100)
 	writer.WriteHeader(http.StatusOK)
 	writer.Write([]byte(body))
